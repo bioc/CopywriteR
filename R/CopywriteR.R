@@ -131,7 +131,7 @@ CopywriteR <- function(sample.control, destination.folder, reference.folder,
     tryCatch({
         for (samp in sample.paths) {
             header <- scanBamHeader(samp)
-            chr.sort.mode <- c(chr.sort.mode, header[[1]]$text$'@HD'[2])
+            chr.sort.mode <- c(chr.sort.mode, list(header[[1]]$text$'@HD'))
             current.chr.names <- names(header[[1]]$targets)
             chr.names <- c(chr.names, current.chr.names)
             chr.lengths <- c(chr.lengths, header[[1]]$targets)
@@ -144,12 +144,15 @@ CopywriteR <- function(sample.control, destination.folder, reference.folder,
                    "from analysis. Stopping execution of the remaining part of",
                    "the script..."))
     })
-
-    if (!all(chr.sort.mode == "SO:coordinate")) {
+    
+    chr.sort.mode <- unlist(lapply(chr.sort.mode, function(x) {
+        length(grep("SO:coordinate", x))
+    }))
+    if (any(chr.sort.mode == 0)) {
         stop(.wrap("The following .bam files are unsorted:"), "\n",
-             paste(sample.paths[which(!chr.sort.mode == "SO:coordinate")], "\n",
-             "Please sort these .bam files based on coordinates",
-             collapse = "\n"))
+             paste(sample.paths[which(chr.sort.mode == 0)],
+             collapse = "\n"), "\n",
+             "Please sort these .bam files based on coordinates")
     }
     if (!all(prefixes == prefixes[1])) {
         stop(.wrap("The bam files have different chromosome name prefixes.",
