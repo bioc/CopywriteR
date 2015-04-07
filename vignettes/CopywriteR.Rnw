@@ -225,8 +225,6 @@ by destination.folder. This folder contains the following files:
 cat(list.files(path = file.path(data.folder, "CNAprofiles")), sep = "\n")
 @
 
-\newpage
-
 The read\symbol{95}counts.txt file contains both uncompensated and compensated
 read counts for every sample, as well as the corresponding fraction.of.bin
 values. The 'fraction of bin' indicates what fraction of the bin is not on
@@ -237,6 +235,8 @@ the read\symbol{95}counts.txt has the following content:
 read.table(file = file.path(data.folder, "CNAprofiles", "read_counts.txt"),
            header = TRUE)[1001:1006, ]
 @
+
+\newpage
 
 The log2\symbol{95}read\symbol{95}counts.igv file can be opened in the IGV
 browser (\url{http://www.broadinstitute.org/igv/}), and contains
@@ -264,8 +264,6 @@ function for the 'fractions of bins'. The read.counts.compensated files
 contain the plots and the loesses that are used for GC-content and
 mappability corrections.
 
-\newpage
-
 \subsection{\Rcode{plotCNA()}}
 
 The \Rcode{plotCNA()} function allows segmentation of the copy number data using
@@ -289,6 +287,8 @@ For every sample a separate directory is created:
 cat(list.files(path = file.path(data.folder, "CNAprofiles", "plots")), sep = "\n")
 @
 
+\newpage
+
 The samples are plotted per chromosome, as well as in a genome-wide fashion.
 We provide here the result for chromosome 4:
 
@@ -309,14 +309,14 @@ We maintain a troubleshooting GitHub page where various issues are discussed
 that have been raised by CopywriteR users. Please follow this link:
 \url{https://github.com/PeeperLab/CopywriteR#troubleshooting}.
 
+\newpage
+
 \section{Session Information}
 
 The version number of \R{} and packages loaded for generating the vignette were:
 <<sessionInfo, results=tex, print=TRUE, eval=TRUE>>=
 toLatex(sessionInfo())
 @
-
-\newpage
 
 \bibliography{CopywriteR}
 
