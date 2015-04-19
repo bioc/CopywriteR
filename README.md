@@ -45,10 +45,19 @@ The pre-compiled ENCODER R-package can be installed from the command line with t
 =======
 
 
-Installation:
+# Requirements:
+
+Samtools and MACS
 
 
-How to run ENCODER:
+# Installation:
+
+R CMD INSTALL ENCODER.tar.gz
+
+
+
+# ENCODER usage:
+
 
 
 
