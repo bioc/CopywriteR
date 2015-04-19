@@ -2,6 +2,7 @@ ENCODER
 =======
 
 ENCODER: off-target sequence reads for DNA copy number detection by whole-exome sequencing
+<<<<<<< HEAD
 
 Current methods for the detection of copy number aberrations (CNA) from whole-exome sequencing (WES) data use the depth of coverage of captured exons only. Accurate CNA determination is complicated by the uneven distribution of exons throughout the genome and non-uniform sequence capture. We developed ENCODER (ENhanced COpy number Detection from Exome Reads), which eludes these problems by exploiting the ‘off-target’ sequence reads. ENCODER allows the extraction of uniformly distributed copy number information. In addition, ENCODER outperforms methods based on exonic sequence read counts, particularly on samples of low quality.
 
@@ -38,3 +39,5 @@ The pre-compiled ENCODER R-package can be installed from the command line with t
 
 
 
+=======
+>>>>>>> Initial commit
