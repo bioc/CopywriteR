@@ -2,15 +2,6 @@ exportPattern("^[[:alpha:]]+")
 
 importFrom(matrixStats, madDiff, colMins, colMaxs)
 importFrom(gtools, mixedorder)
-<<<<<<< HEAD
-importFrom(data.table, data.table)
-import(chipseq)
-import(IRanges)
-import(Rsamtools)
-import(snowfall)
-import(DNAcopy)
-import(GenomicAlignments)
-=======
 importFrom(BiocParallel, bplapply, bpworkers)
 importFrom(data.table, data.table)
 importFrom(S4Vectors, Rle)
@@ -23,4 +14,3 @@ import(GenomicAlignments)
 import(GenomicRanges)
 import(CopyhelpeR)
 import(futile.logger)
->>>>>>> master
