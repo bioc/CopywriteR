@@ -1,10 +1,16 @@
 plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
                     y.max, ...) {
 
+<<<<<<< HEAD
+=======
+    start.time <- Sys.time()
+
+>>>>>>> master
     ## Make destination folder path absolute
     destination.folder <- tools::file_path_as_absolute(destination.folder)
     destination.folder <- file.path(destination.folder, "CNAprofiles")
 
+<<<<<<< HEAD
     ## Check the existence of folders and files
     if (!file.exists(destination.folder)) {
         stop("The destination folder could not be found. Please change your ",
@@ -12,20 +18,57 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
     }
 
     load(file.path(destination.folder, "input.Rdata"), .GlobalEnv)
+=======
+    ## Provide output to log
+    flog.appender(appender.file(file.path(destination.folder,
+                                          "CopywriteR.log")))
+    args.ellipsis <- unlist(list(...))
+    flog.info(paste0("plotCNA was run using the following commands:", "\n\n",
+                     "plotCNA(destination.folder = \"",
+                     dirname(destination.folder),
+                     "\", smoothed = ", smoothed,
+                     if (!missing(sample.plot)) {", sample.plot = sample.plot"},
+                     if (!missing(y.min)) {paste0(", y.min = ", y.min)},
+                     if (!missing(y.max)) {paste0(", y.max = ", y.max)},
+                     if (!missing(...)) {paste0(", ", paste(names(args.ellipsis),
+                                                "=", args.ellipsis,
+                                                collapse = ", "))},
+                     ")"))
+
+    ## Check the existence of folders and files
+    if (!file.exists(destination.folder)) {
+        stop(.wrap("The destination folder could not be found. Please change",
+                   "the path specified in", sQuote(destination.folder)))
+    }
+
+    # Pre-define inputStructure variable to avoid it from raising NOTES during
+    # R CMD CHECK (variable is loaded from file below)
+    inputStructure <- NULL
+
+    # Load inputStructure variable
+    load(file.path(destination.folder, "input.Rdata"))
+>>>>>>> master
 
     ## Set variables
     chromosomes <- inputStructure$chromosomes
     nautosomes <- length(grep("[0-9]", chromosomes))
     prefix <- inputStructure$prefix
+<<<<<<< HEAD
     ncpu <- inputStructure$ncpu
     bin.file <- inputStructure$bin.file
+=======
+>>>>>>> master
     bin.size <- inputStructure$bin.size
 
     ## Set sample.plot
     if (missing(sample.plot)) {
         sample.plot <- apply(inputStructure$sample.control, c(1, 2),
                              function(x) {
+<<<<<<< HEAD
             x <- paste0("log2.read.counts.", basename(x))
+=======
+            x <- paste0("log2.", basename(x))
+>>>>>>> master
         })
         all.samples <- unique(as.vector(sample.plot))
         sample.plot <- rbind(data.frame(sample.plot, stringsAsFactors = FALSE),
@@ -36,8 +79,12 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
         colnames(sample.plot) <- c("samples", "controls")
         sample.plot[, ] <- apply(sample.plot, c(1, 2), function(x) {
             if (!is.na(x)) {
+<<<<<<< HEAD
                 x <- paste0("log2.read.counts.",
                             gsub("_properreads", "", basename(x)))
+=======
+                x <- paste0("log2.", gsub("_properreads", "", basename(x)))
+>>>>>>> master
             } else {
                 x <- as.character(x)
             }
@@ -51,6 +98,7 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
                                    check.names = FALSE)
 
     ## Remove prefix and convert chromosome names to integers
+<<<<<<< HEAD
     # log2.read.counts <- log2.read.counts[-which(rowSums(is.na(log2.read.counts[, -c(1:4), drop = FALSE])) > 0), ]
     log2.read.counts$Chromosome <- gsub(prefix, "", log2.read.counts$Chromosome)
     log2.read.counts$Chromosome <- gsub("X", length(nautosomes + 1),
@@ -62,6 +110,26 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
     ## Fix behaviour of DNAcopy with 'outlier' values
     log2.read.counts[, 5:ncol(log2.read.counts)] <- apply(log2.read.counts[, 5:ncol(log2.read.counts), drop = FALSE],
                                                           c(1, 2), function(x) {
+=======
+    log2.read.counts$Chromosome <- gsub(prefix, "", log2.read.counts$Chromosome)
+    chromosomes <- gsub(prefix, "", chromosomes)
+    
+    log2.read.counts$Chromosome <- gsub("X", nautosomes + 1,
+                                        log2.read.counts$Chromosome)
+    chromosomes <- gsub("X", nautosomes + 1, chromosomes)
+    
+    log2.read.counts$Chromosome <- gsub("Y", nautosomes + 2,
+                                        log2.read.counts$Chromosome)
+    chromosomes <- gsub("Y", nautosomes + 2, chromosomes)
+    
+    log2.read.counts$Chromosome <- as.integer(log2.read.counts$Chromosome)
+    chromosomes <- sort(as.integer(chromosomes))
+
+    ## Fix behaviour of DNAcopy with 'outlier' values
+    log2.read.counts[, 5:ncol(log2.read.counts)] <-
+        apply(log2.read.counts[, 5:ncol(log2.read.counts), drop = FALSE],
+              c(1, 2), function(x) {
+>>>>>>> master
         if (is.na(x)) {
             x <- NA
         } else if (x < -5) {
@@ -75,6 +143,7 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
 
     ## Create table with values to be plotted
     if (all(na.omit(unlist(sample.plot)) %in% colnames(log2.read.counts))) {
+<<<<<<< HEAD
         plotting.values <- within(log2.read.counts, {
             # Loop through sample.plot calculating the relevant absolute and relative
             # log2.read.counts values. Loop used for readability. Loop in reverse
@@ -97,6 +166,32 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
         stop("One of the samples in sample.plot refers to a BAM file that has ",
              "not been processed in CopywriteR. Please make sure that you have ",
              "provided the correct input files or re-run CopywriteR accordingly.")
+=======
+        plotting.values <-
+            log2.read.counts[, c("Chromosome", "Start", "End", "Feature")]
+        for (i in seq_len(nrow(sample.plot))) {
+            if (!is.na(sample.plot$controls[i])) {
+                plotting.values[, paste0(sample.plot$samples[i], ".vs.",
+                                         sample.plot$controls[i])] <- 
+                    log2.read.counts[, sample.plot$samples[i]] -
+                    log2.read.counts[, sample.plot$controls[i]]
+            } else {
+                plotting.values[, paste0(sample.plot$samples[i], ".vs.none")] <-
+                    log2.read.counts[, sample.plot$samples[i]]
+            }
+        }
+    } else {
+        unique.samples <- unique(na.omit(unlist(sample.plot)))
+        print(unique.samples)
+        print(unique.samples %in% colnames(log2.read.counts))
+        missing.samples <- unique.samples[!unique.samples %in% colnames(log2.read.counts)]
+        print(missing.samples)
+        stop(.wrap("The following samples refer to .bam files that have not",
+                   "been processed by CopywriteR:",
+                   paste(sQuote(missing.samples), collapse = ", "),
+                   ". Please re-analyze all required samples using CopywriteR",
+                   "and run the plotCNA function again."))
+>>>>>>> master
     }
 
     ## Apply DNAcopy
@@ -113,6 +208,7 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
                                               "segment.Rdata"))
 
     ## Calculate the chromosome lengths from the bin.bed file
+<<<<<<< HEAD
     chrom.lengths <- scanBamHeader(inputStructure$sample.control$samples[1])[[1]]$targets
     chrom.lengths <- data.frame(Chromosome = names(chrom.lengths),
                                 Length = chrom.lengths)
@@ -139,6 +235,35 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
         maploc <- maploc + start.position.chrom
         rm(start.position.chrom)
     })
+=======
+    chrom.lengths <-
+        scanBamHeader(inputStructure$sample.control$samples[1])[[1]]$targets
+    names(chrom.lengths) <- gsub(prefix, "", names(chrom.lengths))    
+    chrom.lengths <- data.frame(Chromosome = names(chrom.lengths),
+                                Length = chrom.lengths, row.names = NULL)
+    suppressWarnings(chrom.lengths <- chrom.lengths[chrom.lengths$Chromosome %in% c("X", "Y") |
+                                                    !is.na(as.integer(as.vector(chrom.lengths$Chromosome))), ])
+    chrom.lengths <- chrom.lengths[mixedorder(chrom.lengths$Chromosome), ]
+    chrom.lengths$Chromosome <- gsub("X", nautosomes + 1,
+                                     chrom.lengths$Chromosome)
+    chrom.lengths$Chromosome <- gsub("Y", nautosomes + 2,
+                                     chrom.lengths$Chromosome)
+    chrom.lengths[, "CumSum"] <- c(0, cumsum(as.numeric(chrom.lengths$Length))[seq_len(nrow(chrom.lengths) - 1)])
+    
+    ## Create plots
+    segment.CNA.object$output[, "start.position.chrom"] <-
+        chrom.lengths$CumSum[match(as.integer(segment.CNA.object$output$chrom),
+                                   chrom.lengths$Chromosome)]
+    segment.CNA.object$output$loc.start <- segment.CNA.object$output$loc.start + segment.CNA.object$output$start.position.chrom
+    segment.CNA.object$output$loc.end <- segment.CNA.object$output$loc.end + segment.CNA.object$output$start.position.chrom
+    segment.CNA.object$output$start.position.chrom <- NULL
+    
+    segment.CNA.object$data[, "start.position.chrom"] <-
+        chrom.lengths$CumSum[match(as.integer(segment.CNA.object$data$chrom),
+                                   chrom.lengths$Chromosome)]
+    segment.CNA.object$data$maploc <- segment.CNA.object$data$maploc + segment.CNA.object$data$start.position.chrom
+    segment.CNA.object$data$start.position.chrom <- NULL
+>>>>>>> master
 
     # Get sample names
     samples <- colnames(segment.CNA.object$data)
@@ -162,8 +287,15 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
         # Select sample
         select.sample <- x
         current.sample <- segment.CNA.object
+<<<<<<< HEAD
         current.sample$data <- current.sample$data[, c("chrom", "maploc", select.sample)]
         current.sample$output <- current.sample$output[current.sample$output$ID == select.sample, ]
+=======
+        current.sample$data <-
+            current.sample$data[, c("chrom", "maploc", select.sample)]
+        current.sample$output <-
+            current.sample$output[current.sample$output$ID == select.sample, ]
+>>>>>>> master
 
         # Create and set new directory
         dir.create(file.path(plot.folder, select.sample))
@@ -179,6 +311,7 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
             current.sample$output <- current.sample$output[current.sample$output$chrom %in% select.chrom, ]
 
             # Set variables
+<<<<<<< HEAD
             genome.position.min <- chrom.lengths$CumSum[match(min(select.chrom),
                                                               chrom.lengths$Chromosome)]
             genome.position.max <- chrom.lengths$CumSum[match(max(select.chrom),
@@ -191,6 +324,21 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
                 name.chrom <- "all.chrom"
             } else {
                 name.chrom <- paste0("chrom.", x)
+=======
+            genome.position.min <-
+                chrom.lengths$CumSum[match(min(select.chrom),
+                                           chrom.lengths$Chromosome)]
+            genome.position.max <-
+                chrom.lengths$CumSum[match(max(select.chrom),
+                                           chrom.lengths$Chromosome)] +
+                                     chrom.lengths$Length[match(max(select.chrom), chrom.lengths$Chromosome)]
+
+            # Plot data
+            if (length(x) > 1) {
+                name.chrom <- "all_chrom"
+            } else {
+                name.chrom <- paste0("chrom_", x)
+>>>>>>> master
             }
             pdf(file = paste0(name.chrom, ".pdf"), width = 14, height = 7)
             plot(current.sample$data[, "maploc"],
@@ -219,9 +367,15 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
                  labels = paste0("mad = ", round(madDiff(current.sample$data[, select.sample]), 3)))
             text(x = 0.035 * (genome.position.max - genome.position.min) + genome.position.min,
                  y = 0.075 * (y.max - y.min) + y.max,
+<<<<<<< HEAD
                  labels = paste0(bin.size/1000, " kb bins"))
             par(xpd = FALSE)
             ticks <- (chrom.lengths$CumSum + chrom.lengths$Length/2)[select.chrom]
+=======
+                 labels = paste0(bin.size / 1000, " kb bins"))
+            par(xpd = FALSE)
+            ticks <- (chrom.lengths$CumSum + chrom.lengths$Length / 2)[select.chrom]
+>>>>>>> master
             axis(1, at = ticks, labels = select.chrom)
             if (length(select.chrom) > 1) {
                 abline(v = chrom.lengths$CumSum[2:nrow(chrom.lengths)],
@@ -230,4 +384,13 @@ plotCNA <- function(destination.folder, smoothed = TRUE, sample.plot, y.min,
             dev.off()
         }))
     }))
+<<<<<<< HEAD
 }
+=======
+    flog.info(paste("Total calculation time of plotCNA was",
+                    round(difftime(Sys.time(), start.time, units = "mins"), 2),
+                    "minutes"))
+    cat("Total calculation time of CopywriteR was: ",
+        Sys.time() - start.time, "\n\n")
+}
+>>>>>>> master
