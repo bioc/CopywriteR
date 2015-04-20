@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-ENCODER
-=======
-
-ENCODER: off-target sequence reads for DNA copy number detection by whole-exome sequencing
-=======
 # CopywriteR
 #### (formerly known as [ENCODER](https://github.com/PeeperLab/ENCODER))
 
@@ -414,4 +408,3 @@ The CopywriteR tool has been cited and referenced by:
 - [x] Make captureRegionsBedFile optional
 - [x] Allow processing of single-end sequences
 - [x] Increase speed for generating bins in `preCopywriteR`
->>>>>>> master
