@@ -387,7 +387,7 @@ CopywriteR <- function(sample.control, destination.folder, reference.folder,
                 peaks <- data.frame()
             }
 
-            if (nrow(peaks) > 0) {
+            if (nrow(data.frame(peaks)) > 0) {
                 test <- data.frame(seqnames = names(chromosomes)[selection],
                                    start = start(peaks), end = end(peaks))
 
