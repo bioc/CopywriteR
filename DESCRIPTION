@@ -1,7 +1,7 @@
 Package: CopywriteR
 Type: Package
 Title: Copy number information from targeted sequencing using off-target reads
-Version: 2.31.0
+Version: 2.31.1
 Date: 2016-02-23
 Author: Thomas Kuilman
 Maintainer: Oscar Krijgsman <o.krijgsman@nki.nl>
@@ -12,3 +12,4 @@ URL: https://github.com/PeeperLab/CopywriteR
 Description: CopywriteR extracts DNA copy number information from targeted sequencing by utiizing off-target reads. It allows for extracting uniformly distributed copy number information, can be used without reference, and can be applied to sequencing data obtained from various techniques including chromatin immunoprecipitation and target enrichment on small gene panels. Thereby, CopywriteR constitutes a widely applicable alternative to available copy number detection tools.
 License: GPL-2
 biocViews: ImmunoOncology, TargetedResequencing, ExomeSeq, CopyNumberVariation, Preprocessing, Visualization, Coverage
+PackageStatus: Deprecated
